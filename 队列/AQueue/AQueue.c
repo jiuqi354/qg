@@ -11,7 +11,7 @@
  *  @notice      : None
  */
 void InitAQueue(AQueue *Q){
-    if(Q->data[0]){
+    if(Q->front!=-1){
         printf("已初始化，请勿重复初始化\n");
         return;
     }
@@ -32,7 +32,7 @@ void InitAQueue(AQueue *Q){
  *  @notice      : None
  */
 void DestroyAQueue(AQueue *Q){
-    if(!Q->data[0]){
+    if(Q->front==-1){
         printf("未初始化队列，请先初始化！\n");
         return;
     }
@@ -40,6 +40,7 @@ void DestroyAQueue(AQueue *Q){
         free(Q->data[i]);
     }
     Q->data[0] = NULL;
+    Q->front=Q->rear=-1;
     printf("销毁成功\n");
 }
 
@@ -53,11 +54,11 @@ void DestroyAQueue(AQueue *Q){
  *  @notice      : None
  */
 Status IsFullAQueue(const AQueue *Q){
-    if(!Q->data[0]){
+    if(Q->front==-1){
         printf("未初始化，请先初始化队列\n");
         return FALSE;
     }
-    if(IsEmptyAQueue(Q)==TRUE)
+    if(LengthAQueue(Q)==0)
         return FALSE;
     if(LengthAQueue(Q)==MAXQUEUE-1){
         return TRUE;
@@ -74,7 +75,7 @@ Status IsFullAQueue(const AQueue *Q){
  *  @notice      : None
  */
 Status IsEmptyAQueue(const AQueue *Q){
-    if(!Q->data[0])
+    if(Q->front==-1)
     {
         printf("未初始化，请先初始化队列\n");
         return FALSE;
@@ -135,12 +136,12 @@ int LengthAQueue(AQueue *Q){
  *  @notice      : 队列是否满了或为空
  */
 Status EnAQueue(AQueue *Q, void *data){
-    if (IsFullAQueue(Q))
+    if (IsFullAQueue(Q)==TRUE)
     {
         printf("队列已满\n");
         return FALSE;
     }
-    if (IsEmptyAQueue(Q)==TRUE)
+    if (LengthAQueue(Q)==0)
     {
         memcpy(Q->data[Q->front], data, 20);   //原封不动将数据复制到数组中
         Q->rear = (Q->rear + 1) % Q->length;        //空闲单元法
@@ -179,7 +180,10 @@ Status DeAQueue(AQueue *Q){
  *  @notice      : None
  */
 void ClearAQueue(AQueue *Q){
-    if (IsEmptyAQueue(Q)==TRUE)
+    if(Q->front==-1){
+        printf("未初始化队列，请先初始化！\n");
+    }
+    if (LengthAQueue(Q)==0)
     {
         printf("队列已为空\n");
         return;
@@ -197,7 +201,7 @@ void ClearAQueue(AQueue *Q){
  *  @notice      : None
  */
 Status TraverseAQueue(const AQueue *Q, void (*foo)(void *q)){
-    if(!Q->data[0])
+    if(Q->front==-1)
     {
         printf("未初始化，请先初始化队列\n");
         return FALSE;

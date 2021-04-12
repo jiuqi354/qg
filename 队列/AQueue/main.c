@@ -9,6 +9,7 @@ int main(){
     int num;
     char d[1024];
     AQueue queue;
+    queue.data[0]=NULL;
     queue.front=queue.rear=-1;
     queue.length=-1;
     void *e=NULL;
@@ -42,6 +43,7 @@ int main(){
                 DestroyAQueue(&queue);
                 break;
             case 3:
+
                 if(IsEmptyAQueue(&queue)==TRUE){
                     printf("队列为空\n");
                     break;
@@ -58,12 +60,13 @@ int main(){
                 printf("队列长度为%d\n",LengthAQueue(&queue));
                 break;
             case 6:
-                if(!queue.data[0]){
+                if(queue.front==-1){
                     printf("未初始化，请先初始化！\n");
+                    break;
                 }
                 printf("请输入想入队的数据：\n");
-                scanf("%s", d);
-                EnAQueue(&queue, d);
+                gets(d);
+                if(EnAQueue(&queue, d)==TRUE)
                 printf("入队成功！\n");
                 break;
             case 7:
@@ -83,6 +86,7 @@ int main(){
             case 11:
                 return 0;
             default:
+                printf("请输入正确的数字！\n");
                 break;
         }
         fflush(stdin);

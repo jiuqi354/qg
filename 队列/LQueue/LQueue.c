@@ -72,8 +72,9 @@ Status GetHeadLQueue(LQueue *Q, void *e){
         printf("尚未初始化队列，请初始化！\n");
         return FALSE;
     }
-    if(Q->length==0)
-        return FALSE;
+    if(Q->length==0){
+        printf("队列为空\n");
+        return FALSE;}
     memcpy(e,Q->front->data,20);    //复制数据到e指向的位置里
     return TRUE;
 }
@@ -109,7 +110,8 @@ Status EnLQueue(LQueue *Q, void *data){
     if(!p)
         return FALSE;               //分配失败
     p->next=NULL;
-    p->data=data;
+    p->data=(void *)malloc(1024);
+    memcpy(p->data,data,1024);
     if(Q->length==0){
         Q->front=Q->rear=p;
     }else{
@@ -136,6 +138,10 @@ Status DeLQueue(LQueue *Q){
         printf("队列为空，无法出队\n");
         return FALSE;
     }
+    if(Q->length==1){
+        Q->length=0;
+        return TRUE;
+    }
     NodePtr p=Q->front->next;
     free(Q->front);
     Q->front=p;
@@ -150,13 +156,14 @@ Status DeLQueue(LQueue *Q){
  *  @notice      : None
  */
 void ClearLQueue(LQueue *Q){
-    if(!Q->front){
+    if(!Q->front&&Q->front==Q->rear){
         printf("未初始化队列，请先初始化！\n");
         return;
     }
-    while(Q->length!=0){
+    while(Q->length>1){
         DeLQueue(Q);
     }
+    Q->length=0;
     printf("清空成功！\n");
 }
 
@@ -176,10 +183,12 @@ Status TraverseLQueue(const LQueue *Q, void (*foo)(void *q)){
         printf("队列为空\n");
         return FALSE;
     }
-    void *p=Q->front->data;
+    Node *p=Q->front;
     int i=0;
-    for(i=0;i<Q->length;i++)
-        foo(p);
+    for(i=0;i<Q->length;i++){
+        foo(p->data);
+        p=p->next;
+    }
     printf("\n");
     return TRUE;
 }

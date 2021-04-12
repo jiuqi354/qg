@@ -49,6 +49,10 @@ int main(){
                 DestroyLQueue(&queue);
                 break;
             case 3:
+                if(!queue.front){
+                    printf("未初始化，请初始化队列！\n");
+                    break;
+                }
                 if(IsEmptyLQueue(&queue)==TRUE){
                     printf("队列为空\n");
                     break;
@@ -56,7 +60,7 @@ int main(){
                 printf("队列不为空\n");
                 break;
             case 4:
-                GetHeadLQueue(&queue,e);
+                if(GetHeadLQueue(&queue,e)==TRUE)
                 puts((char *)e);
                 break;
             case 5:
@@ -68,6 +72,7 @@ int main(){
             case 6:
                 if(!queue.front){
                     printf("未初始化，请先初始化！\n");
+                    break;
                 }
                 /*printf("你想入队什么类型？：\n");
                 printf("1. 整型 2. 字符型 3. 浮点型 4. 字符串\n");
